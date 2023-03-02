@@ -1,0 +1,31 @@
+# This part was generated for us by "spin new http-empty"
+spin_version = "1"
+authors = ["Matt Butcher <matt.butcher@fermyon.com>"]
+description = "PHP for Fermyon Cloud"
+name = "hello-php"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+# This is the stuff we are adding.
+[[component]]
+# Latest PHP-Wasm
+id = "PHP"
+files = [ { source = "./src", destination = "/" } ]
+[component.source]
+# URL to download the .wasm file
+url = "https://github.com/vmware-labs/webassembly-language-runtimes/releases/download/php%2F7.4.32%2B20221124-2159d1c/php-cgi-7.4.32.speed-optimized.wasm"
+# digest of the .wasm file we expect to get from the URL
+digest = "sha256:511720698dee56134ed8a08a87131d33c3ea8a64b6726cd6710d624bca4ceb6c"
+[component.trigger]
+# Make sure the executor is wagi
+executor = { type = "wagi"}
+# This means PHP will be used for all requests.
+route = "/..."
+
+[[component]]
+source = { url = "https://github.com/fermyon/spin-redirect/releases/download/v0.0.1/redirect.wasm", digest = "sha256:d57c3d91e9b62a6b628516c6d11daf6681e1ca2355251a3672074cddefd7f391" }
+id = "redirect-root"
+environment = { DESTINATION = "/index.php" }
+[component.trigger]
+route = "/"
+executor = { type = "wagi" }
